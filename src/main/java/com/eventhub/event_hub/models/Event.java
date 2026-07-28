@@ -22,9 +22,23 @@ public class Event extends RepresentationModel<Event> implements Serializable{
     private String title;
     private String description;
     private LocalDateTime dateTime;
+
     private String local;
     private Integer maximumCapacity;
     private BigDecimal price;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
+    // Getters and Setters
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 
     public LocalDateTime getDateTime() {
         return dateTime;
