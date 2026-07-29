@@ -17,6 +17,7 @@
 * **Web / REST:** Spring Web (MVC)
 * **Data Access:** Spring Data JPA / Hibernate
 * **Database:** PostgreSQL
+* **Containerization:** Docker & Docker Compose
 * **Validation:** Jakarta Bean Validation
 * **Build Tool:** Maven
 
@@ -36,18 +37,55 @@
 
 ### Prerequisites
 
-* **Java JDK 21** or higher
-* **PostgreSQL** installed and running
-* **Maven** (or an IDE like IntelliJ IDEA)
+
+* [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running.
+* [Git](https://git-scm.com/) installed.
+
+*(Optional for local non-containerized dev: Java JDK 21+ and Maven)*
 
 ---
 
-### ⚙️ Database Configuration
+## 🐳 Running with Docker (Recommended)
 
-Configure your PostgreSQL credentials in `src/main/resources/application.properties`:
+The easiest way to run the full application (API + PostgreSQL Database) is using Docker Compose.
 
-```properties
-# Database Configuration
+1. **Clone the repository:**
+   ```bash
+   git clone [https://github.com/BarbosaMatheu/event-hub.git](https://github.com/BarbosaMatheu/event-hub.git) 
+   ```
+
+### Navigate to the project directory:
+
+``` Bash
+ cd event-hub
+```
+### Build and start the containers:
+
+```Bash
+docker compose up --build
+```
+
+### Access the API:
+
+**API Root: http://localhost:8080**
+
+PostgreSQL: localhost:5432 (User: postgres, Password: postgrespassword, DB: eventhub_db)
+
+### Stop the application:
+
+```Bash
+docker compose down
+```
+
+## ⚙️ Local Development (Without Docker)
+
+If you prefer running PostgreSQL and Spring Boot locally on your host machine:
+
+Configure your PostgreSQL credentials in src/main/resources/application.properties:
+
+
+``` 
+### Database Configuration
 spring.datasource.url=jdbc:postgresql://localhost:5432/eventhub_db
 spring.datasource.username=postgres
 spring.datasource.password=YOUR_POSTGRES_PASSWORD
@@ -58,21 +96,8 @@ spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.format_sql=true
 spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+Run the application using Maven:**
+
 ```
-
-### Running the Application
-
-1. Clone the repository:
-
-'git clone [https://github.com/NopsyNight/event-hub.git](https://github.com/NopsyNight/event-hub.git)] '
-
-2. Navigate to the project directory:
-
-cd event-hub
-
-3. Run The Application:
-
+``` Bash
 ./mvnw spring-boot:run
-
-4. Acess the API:
-   The server will start at http://localhost:8080.
