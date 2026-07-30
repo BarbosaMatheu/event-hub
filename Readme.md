@@ -49,10 +49,8 @@
 
 The easiest way to run the full application (API + PostgreSQL Database) is using Docker Compose.
 
-1. **Clone the repository:**
-   ```bash
-   git clone [https://github.com/BarbosaMatheu/event-hub.git](https://github.com/BarbosaMatheu/event-hub.git) 
-   ```
+git clone [https://github.com/BarbosaMatheu/event-hub.git](https://github.com/BarbosaMatheu/event-hub.git)
+cd event-hub
 
 ### Navigate to the project directory:
 
@@ -96,8 +94,21 @@ spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.format_sql=true
 spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
-Run the application using Maven:**
 
 ```
+# Run the application using Maven:
 ``` Bash
 ./mvnw spring-boot:run
+```
+
+# 📸 API'S Demonstration (Swagger UI)
+
+## Creating a New Category!
+
+![Creating Category](doc/image.png)
+
+## Fetching all Categories!
+![Taking all Categories](doc/image-1.png)
+
+## Creating a New Event!
+![Creating Event](doc/img_1.png)
