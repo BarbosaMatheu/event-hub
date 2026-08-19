@@ -1,6 +1,7 @@
 package com.eventhub.event_hub.models;
 
 import com.eventhub.event_hub.enums.UserRole;
+import com.eventhub.event_hub.enums.Profile;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -29,19 +30,25 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
+    @Enumerated(EnumType.STRING)
+    private Profile profile;
+
     public User(String login, String password, UserRole role) {
     this.login = login;
     this.password = password;
     this.role = role;
-}
+    this.profile = null; 
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.role == UserRole.ADMIN) {
-            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
-        } else {
-            return List.of(new SimpleGrantedAuthority("ROLE_USER"));
-        }
+        return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+    } else if (this.role == UserRole.CLIENT) {
+        return List.of(new SimpleGrantedAuthority("ROLE_CLIENT"));
+    } else {
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
     }
 
     @Override
