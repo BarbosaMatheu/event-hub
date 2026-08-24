@@ -37,14 +37,14 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public OrderResponseDto findById(UUID id) { // <-- Corrigido para d minúsculo
+    public OrderResponseDto findById(UUID id) { 
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
         return OrderResponseDto.fromEntity(order);
     }
 
     @Transactional
-    public OrderResponseDto updateStatus(UUID id, OrderStatus newStatus) { // <-- Corrigido para updateStatus
+    public OrderResponseDto updateStatus(UUID id, OrderStatus newStatus) { 
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
         order.updateStatus(newStatus);
