@@ -21,6 +21,9 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgrespassword
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      # Override with a real secret via a .env file or your shell for anything
+      # beyond local/demo use — never commit real secrets to docker-compose.yml.
+      JWT_SECRET: ${JWT_SECRET:-local-dev-only-secret-change-me-please-32chars}
     depends_on:
       - postgres-db
 

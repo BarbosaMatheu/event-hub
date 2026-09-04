@@ -37,4 +37,17 @@ public class CategoryService {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found with ID: " + id));
     }
+
+    @Transactional
+    public Category update(UUID id, CategoryRecordDto dto) {
+        Category category = findById(id);
+        BeanUtils.copyProperties(dto, category);
+        return categoryRepository.save(category);
+    }
+
+    @Transactional
+    public void delete(UUID id) {
+        Category category = findById(id);
+        categoryRepository.delete(category);
+    }
 }

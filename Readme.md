@@ -26,7 +26,7 @@
 ## ✨ Key Features
 
 * 📅 **Event Management:** Full CRUD operations for events (title, description, date/time, venue, maximum capacity, price).
-* 🗂️ **Category Organization:** Group events into categories (e.g., *Tech*, *Workshops*, *Concerts*, *Meetups*).
+* 🗂️ **Category Organization:** Full CRUD for categories (e.g., *Tech*, *Workshops*, *Concerts*, *Meetups*), used to group events.
 * 👥 **Participant Management:** Register attendees with validated fields (Email, Name, ID).
 * 🎟️ **Registration & Booking:** Handle user registrations with automated capacity checks and duplicate booking protection.
 * ⚠️ **Global Exception Handling:** Custom exception handling (`@ControllerAdvice`) providing clear HTTP responses (`400 Bad Request`, `404 Not Found`).
@@ -77,29 +77,29 @@ docker compose down
 
 ## ⚙️ Local Development (Without Docker)
 
-If you prefer running PostgreSQL and Spring Boot locally on your host machine:
+If you prefer running PostgreSQL and Spring Boot locally on your host machine, `application.properties` reads everything from environment variables (with safe local defaults for the DB URL/username only — never for secrets):
 
-Configure your PostgreSQL credentials in src/main/resources/application.properties:
-
-
-``` 
-### Database Configuration
-spring.datasource.url=jdbc:postgresql://localhost:5432/eventhub_db
-spring.datasource.username=postgres
-spring.datasource.password=YOUR_POSTGRES_PASSWORD
-spring.datasource.driver-class-name=org.postgresql.Driver
-
-# JPA / Hibernate
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.format_sql=true
-spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
-
+``` Bash
+export SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/eventhub_db
+export SPRING_DATASOURCE_USERNAME=postgres
+export SPRING_DATASOURCE_PASSWORD=your_local_password
+export JWT_SECRET=a-long-random-string-at-least-32-chars
 ```
+
+`JWT_SECRET` is required — the application will fail to start without it. This is intentional: it prevents the API from ever silently signing tokens with a hardcoded default secret.
+
 # Run the application using Maven:
 ``` Bash
 ./mvnw spring-boot:run
 ```
+
+## ✅ Running Tests
+
+```Bash
+./mvnw test
+```
+
+The suite includes unit tests for the domain rules (`Order` status transitions, total calculation) and for the service layer (`EventService`, `CategoryService`) using Mockito.
 
 # 📸 API'S Demonstration (Swagger UI)
 

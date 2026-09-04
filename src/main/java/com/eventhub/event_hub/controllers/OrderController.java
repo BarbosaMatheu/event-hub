@@ -2,7 +2,7 @@ package com.eventhub.event_hub.controllers;
 
 import com.eventhub.event_hub.dtos.OrderRequestDto;
 import com.eventhub.event_hub.dtos.OrderResponseDto;
-import com.eventhub.event_hub.enums.OrderStatus;
+import com.eventhub.event_hub.dtos.OrderStatusUpdateDto;
 import com.eventhub.event_hub.services.OrderService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -39,10 +39,10 @@ public class OrderController {
     @PutMapping("/{id}/status")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<OrderResponseDto> updateStatus(
-        @PathVariable UUID id, 
-        @RequestBody OrderStatus status) {
-        
-        OrderResponseDto orderResponseDto = orderService.updateStatus(id, status);
+        @PathVariable UUID id,
+        @RequestBody @Valid OrderStatusUpdateDto request) {
+
+        OrderResponseDto orderResponseDto = orderService.updateStatus(id, request.status());
         return ResponseEntity.ok(orderResponseDto);
     }
 

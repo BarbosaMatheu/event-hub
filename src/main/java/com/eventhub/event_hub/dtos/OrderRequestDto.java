@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotEmpty;
 import java.util.List;
 
 public record OrderRequestDto(
-    @NotEmpty(message = "A lista de itens não pode estar vazia")
+    @NotEmpty(message = "The items list must not be empty")
     @Valid 
     List<OrderItemRequestDto> items
 ) {}

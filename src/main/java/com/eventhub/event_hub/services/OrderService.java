@@ -6,6 +6,7 @@ import com.eventhub.event_hub.models.Order;
 import com.eventhub.event_hub.models.OrderItem;
 import com.eventhub.event_hub.dtos.OrderItemRequestDto;
 import com.eventhub.event_hub.dtos.OrderResponseDto;
+import com.eventhub.event_hub.exceptions.ResourceNotFoundException;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,25 +38,30 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public OrderResponseDto findById(UUID id) { 
-        Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
+    public OrderResponseDto findById(UUID id) {
+        Order order = findOrderOrThrow(id);
         return OrderResponseDto.fromEntity(order);
     }
 
     @Transactional
-    public OrderResponseDto updateStatus(UUID id, OrderStatus newStatus) { 
-        Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
+    public OrderResponseDto updateStatus(UUID id, OrderStatus newStatus) {
+        Order order = findOrderOrThrow(id);
         order.updateStatus(newStatus);
         return OrderResponseDto.fromEntity(orderRepository.save(order));
     }
 
     @Transactional
     public OrderResponseDto deleteOrder(UUID id) {
-        Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
+        Order order = findOrderOrThrow(id);
         orderRepository.delete(order);
         return OrderResponseDto.fromEntity(order);
+    }
+
+    // Centralized lookup so every method throws the same, handled exception
+    // type instead of a bare RuntimeException that GlobalExceptionHandler
+    // doesn't recognize.
+    private Order findOrderOrThrow(UUID id) {
+        return orderRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + id));
     }
 }
