@@ -1,10 +1,8 @@
 package com.eventhub.event_hub;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class EventHubApplicationTests {
+class EventHubApplicationTests extends AbstractIntegrationTest {
 
 	@Test
 	void contextLoads() {

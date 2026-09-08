@@ -35,4 +35,3 @@ build/
 # Archives Ambient variables and local Configurations
 .env
 application-local.properties
-application-dev.properties

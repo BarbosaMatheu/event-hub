@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      # Only the unit/service tests need this; the integration test uses
+      # Testcontainers, which spins up its own throwaway Postgres container
+      # automatically, so no external DB service is needed here.
+      - name: Run tests
+        env:
+          JWT_SECRET: ci-only-secret-not-used-in-production-32chars
+        run: ./mvnw -B test
+
+      - name: Build jar
+        env:
+          JWT_SECRET: ci-only-secret-not-used-in-production-32chars
+        run: ./mvnw -B -DskipTests package

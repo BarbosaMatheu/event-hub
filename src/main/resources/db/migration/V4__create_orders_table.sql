@@ -1,0 +1,6 @@
+CREATE TABLE TB_ORDERS (
+    id UUID PRIMARY KEY,
+    status VARCHAR(50) NOT NULL,
+    total_amount NUMERIC(19, 2) NOT NULL DEFAULT 0,
+    created_at TIMESTAMP NOT NULL DEFAULT now()
+);
