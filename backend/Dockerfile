@@ -10,7 +10,7 @@ COPY src ./src
 RUN mvn -B -q -DskipTests package
 
 # ---------- runtime stage ----------
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:24-jre-alpine
 WORKDIR /app
 
 # Never run as root inside the container.
