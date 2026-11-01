@@ -17,7 +17,7 @@
 
 	<properties>
 		<java.version>21</java.version>
-		<testcontainers.version>1.20.6</testcontainers.version>
+		<testcontainers.version>2.0.5</testcontainers.version>
 		<!-- springdoc 3.x is the line built for Spring Boot 4 / Spring Framework 7.
 		     The 2.x line targets Boot 3 and breaks on Framework 7 (e.g. /v3/api-docs output). -->
 		<springdoc.version>3.1.0</springdoc.version>
