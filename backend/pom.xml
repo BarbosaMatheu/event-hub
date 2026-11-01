@@ -21,7 +21,7 @@
 		<!-- springdoc 3.x is the line built for Spring Boot 4 / Spring Framework 7.
 		     The 2.x line targets Boot 3 and breaks on Framework 7 (e.g. /v3/api-docs output). -->
 		<springdoc.version>3.1.0</springdoc.version>
-		<jjwt.version>0.12.5</jjwt.version>
+		<jjwt.version>0.13.0</jjwt.version>
 		<jacoco.version>0.8.13</jacoco.version>
 	</properties>
 
