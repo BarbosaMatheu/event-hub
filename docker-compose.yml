@@ -1,3 +1,11 @@
+# Full stack: PostgreSQL + Spring Boot API + React (nginx).
+#   docker compose up --build
+# Web app:   http://localhost:3000
+# API/Swagger: http://localhost:8080/swagger-ui/index.html
+#
+# Every secret below has a LOCAL-DEMO default so the project runs with one command.
+# For anything beyond a local demo, copy .env.example to .env and set real values.
+
 services:
   postgres-db:
     image: postgres:16-alpine
@@ -5,19 +13,19 @@ services:
     environment:
       POSTGRES_DB: eventhub_db
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgrespassword}
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432" # reachable from your machine only, not from the network
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d eventhub_db"]
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 10
 
   eventhub-api:
-    build: .
+    build: ./backend
     container_name: eventhub-api
     ports:
       - "8080:8080"
@@ -25,12 +33,29 @@ services:
       SPRING_PROFILES_ACTIVE: prod
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/eventhub_db
       SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgrespassword
-      # Override with a real secret via a .env file or your shell for anything
-      # beyond local/demo use — never commit real secrets to docker-compose.yml.
-      JWT_SECRET: ${JWT_SECRET:-local-dev-only-secret-change-me-please-32chars}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-postgrespassword}
+      JWT_SECRET: ${JWT_SECRET:-local-demo-only-secret-change-me-please-32chars}
+      # The only way to get an administrator account (public registration never creates one).
+      ADMIN_LOGIN: ${ADMIN_LOGIN:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-Admin@12345}
+      # Loads a demo catalogue (categories + events) when the database is empty.
+      APP_SEED_ENABLED: ${APP_SEED_ENABLED:-true}
+      APP_TIMEZONE: ${APP_TIMEZONE:-Europe/Madrid}
+      CORS_ALLOWED_ORIGINS: http://localhost:3000
+      # Swagger is off in the prod profile; the demo turns it on.
+      SPRINGDOC_SWAGGER_UI_ENABLED: "true"
+      SPRINGDOC_API_DOCS_ENABLED: "true"
     depends_on:
       postgres-db:
+        condition: service_healthy
+
+  eventhub-web:
+    build: ./frontend
+    container_name: eventhub-web
+    ports:
+      - "3000:80"
+    depends_on:
+      eventhub-api:
         condition: service_healthy
 
 volumes:
