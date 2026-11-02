@@ -15,7 +15,10 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgrespassword}
     ports:
-      - "127.0.0.1:5432:5432" # reachable from your machine only, not from the network
+      # Host port 5433 (not 5432) so this never collides with a PostgreSQL installed on your machine.
+      # It is only needed to connect from an IDE/psql: the API reaches the database through the
+      # Docker network (postgres-db:5432), not through this mapping.
+      - "127.0.0.1:${POSTGRES_HOST_PORT:-5433}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
